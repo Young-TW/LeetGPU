@@ -1,0 +1,66 @@
+# Top-p Sampling
+
+- LeetGPU challenge ID: 60
+- Difficulty: medium
+- URL: https://leetgpu.com/challenges/top-p-sampling
+
+<p>
+  Write a GPU program that implements top-p (nucleus) sampling for LLM inference.
+</p>
+
+<p>
+  Top-p sampling is a text generation technique where you sample from the smallest set of tokens whose cumulative probability exceeds threshold p.
+  This balances randomness and quality better than pure top-k or greedy sampling.
+</p>
+
+<p>
+  Given logits (unnormalized scores) from a language model:
+  <ol>
+    <li>Convert logits to probabilities using softmax</li>
+    <li>Sort tokens by probability (descending)</li>
+    <li>Find the smallest set where cumulative probability ≥ p (the "nucleus")</li>
+    <li>Renormalize the nucleus probabilities to sum to 1</li>
+    <li>Sample a token from the nucleus using the provided random seed</li>
+  </ol>
+</p>
+
+<h2>Implementation Requirements</h2>
+<ul>
+  <li>Use only native features (external libraries are not permitted)</li>
+  <li>The <code>solve</code> function signature must remain unchanged</li>
+  <li>Ensure numerical stability when computing softmax</li>
+</ul>
+
+<h2>Example 1:</h2>
+<pre>
+Input:
+  logits = [1.0, 2.0, 3.0, 0.5]
+  p = 0.9
+  seed = 42
+
+Output:
+  sampled_token = 2 or 1
+  (tokens with highest probabilities, sampled randomly)
+</pre>
+
+<h2>Example 2:</h2>
+<pre>
+Input:
+  logits = [10.0, 1.0, 1.0]
+  p = 0.5
+  seed = 123
+
+Output:
+  sampled_token = 0
+  (single token dominates the probability mass)
+</pre>
+
+<h2>Constraints</h2>
+<ul>
+  <li>3 &le; <code>vocab_size</code> &le; 50,000</li>
+  <li>-100.0 &le; <code>logits[i]</code> &le; 100.0</li>
+  <li>0.0 &lt; <code>p</code> &le; 1.0</li>
+  <li>0 &le; <code>sampled_token</code> &lt; vocab_size</li>
+
+  <li>Performance is measured with <code>vocab_size</code> = 50,000</li>
+</ul>
