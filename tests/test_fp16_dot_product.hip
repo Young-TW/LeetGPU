@@ -1,5 +1,4 @@
 #include "common.h"
-#include <hip/hip_fp16.h>
 
 extern "C" void solve(const __half* A, const __half* B, __half* result, int N);
 

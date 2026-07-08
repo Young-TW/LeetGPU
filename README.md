@@ -4,6 +4,36 @@ Solutions to [LeetGPU](https://leetgpu.com) challenges, written in CUDA.
 
 - `problems/` — challenge statements fetched from leetgpu.com
 - `src/` — solutions (CUDA `.cu`; #41 Simple Inference is PyTorch-only)
+- `ROCm/` — HIP ports of the solutions (generated with `hipify-perl`)
+- `tests/` — local test harnesses built from each spec's examples
+- `tools/` — fetch / compile-check / remote-run scripts
+
+## Local verification (CUDA or ROCm)
+
+Every problem has a harness in `tests/` that feeds the spec's example inputs to
+`solve()` on your own GPU and checks the output — see
+[tests/README.md](tests/README.md) for details.
+
+```sh
+# AMD GPU (ROCm / hipcc), tests link ROCm/*.hip
+tests/run_tests.sh                    # all problems
+GPU_ARCH=gfx1100 tests/run_tests.sh   # non-default arch (default gfx1201)
+
+# NVIDIA GPU (CUDA / nvcc), tests link src/*.cu
+tests/run_tests_cuda.sh
+NVCC_ARCH="-arch=sm_86" tests/run_tests_cuda.sh
+
+# single problem, either runtime
+tests/run_tests.sh softmax
+tests/run_tests_cuda.sh softmax
+
+# 41 Simple Inference (PyTorch)
+python3 tests/test_simple_inference.py
+```
+
+Status: all 88 GPU tests + the PyTorch test pass on ROCm (RX 9070 XT, gfx1201).
+These are the small spec examples only — LeetGPU's official judge additionally
+runs large hidden tests and performance measurement.
 
 ## Problems
 

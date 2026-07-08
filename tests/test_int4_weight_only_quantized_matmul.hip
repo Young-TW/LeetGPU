@@ -1,5 +1,4 @@
 #include "common.h"
-#include <hip/hip_fp16.h>
 #include <stdint.h>
 
 extern "C" void solve(const __half* x, const uint8_t* w_q, const __half* scales, __half* y, int M,

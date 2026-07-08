@@ -1,7 +1,26 @@
 #pragma once
-// Shared helpers for the local ROCm test harnesses. Each test builds the
+// Shared helpers for the local GPU test harnesses. Each test builds the
 // example from the problem spec, calls solve(), and checks the output.
+//
+// Compiles under both runtimes:
+//   ROCm: hipcc  (tests/run_tests.sh, links ROCm/*.hip)
+//   CUDA: nvcc   (tests/run_tests_cuda.sh, links src/*.cu) — hip* calls are
+//                mapped to the cuda* equivalents below.
+#ifdef __HIPCC__
+#include <hip/hip_fp16.h>
 #include <hip/hip_runtime.h>
+#else
+#include <cuda_fp16.h>
+#include <cuda_runtime.h>
+#define hipError_t cudaError_t
+#define hipSuccess cudaSuccess
+#define hipGetErrorString cudaGetErrorString
+#define hipMalloc cudaMalloc
+#define hipMemset cudaMemset
+#define hipMemcpy cudaMemcpy
+#define hipMemcpyHostToDevice cudaMemcpyHostToDevice
+#define hipMemcpyDeviceToHost cudaMemcpyDeviceToHost
+#endif
 
 #include <cmath>
 #include <cstdio>
